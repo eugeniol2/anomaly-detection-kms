@@ -64,8 +64,12 @@ def take_addresses(addresses: Iterator[str], quantity: int) -> str:
 def draw_address_counts(rng: Generator) -> list[int]:
     """Quantos enderecos habituais cada operador tem, na ordem da tabela.
 
-    Sorteado por operador, dentro da faixa do perfil, e nao fixo por perfil
-    (D-041). O `high` do numpy e exclusivo, por isso o `+ 1`.
+    Sorteado por operador, dentro da faixa do perfil, e nao fixo por perfil:
+    quantidade fixa daria a todos os operadores de um mesmo perfil a mesma taxa
+    base de origem de rede nova, e o baseline poderia usar um limiar global em
+    vez de comparar contra o historico daquele operador (D-041).
+
+    O `high` do numpy e exclusivo, por isso o `+ 1`.
     """
     counts: list[int] = []
 

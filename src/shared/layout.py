@@ -38,7 +38,13 @@ from pathlib import Path
 DEFAULT_ROOT = Path("data")
 
 RUNS_INDEX = "runs.csv"
-"""Indice das execucoes: sigma, seed, compromised_admin (D-012)."""
+"""Indice das execucoes: sigma, seed, compromised_admin.
+
+Derivavel da semente, mas materializado em disco, porque derivavel nao e o mesmo
+que inspecionavel. E por este arquivo que se confere, sem reexecutar o gerador,
+que a mesma semente comprometeu o mesmo administrador nas 11 condicoes de sigma
+(D-012).
+"""
 
 METRICS = "metrics.csv"
 """Saida do M10, agregando as 330 execucoes."""
@@ -59,5 +65,12 @@ def run_directory(root: Path, seed: int, sigma: float) -> Path:
 
 
 def calibration_directory(root: Path) -> Path:
-    """Onde ficam as preparacoes, que usam sementes reservadas e ficam fora das 330."""
+    """Onde ficam as preparacoes, executadas uma vez e fora das 330 replicas.
+
+    Sao duas: a calibracao dos limiares absolutos do baseline, que saem do
+    percentil 99 do trafego legitimo sem campanha de ataque, e a otimizacao de
+    hiperparametros. Ambas usam sementes reservadas, fora da faixa de 1 a 30, de
+    modo que o dado da preparacao nao reapareca nas execucoes avaliadas
+    (D-031, D-032).
+    """
     return root / "calibration"

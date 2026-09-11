@@ -1,4 +1,6 @@
-"""Perfis comportamentais da populacao, conforme a Tabela 1 da proposta (D-035).
+"""Perfis comportamentais da populacao: quantos operadores cada um tem, quantos
+escopos cada operador detem, quantas origens de rede habituais usa e sob que
+regime exerce a recuperacao de material (D-035).
 
 A operacao de recuperacao de material e exercida por todos os perfis legitimos.
 Se fosse privativa de parte deles, o proprio exercicio da operacao funcionaria

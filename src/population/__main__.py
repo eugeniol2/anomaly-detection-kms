@@ -10,9 +10,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src.population.keys import build_keys, disable_random_sample, split_keys_by_scope
-from src.population.operators import build_operators_covering_pool, holders_by_scope
-from src.population.scopes import scope_pool
+from src.population.build import build_population
 from src.population.specification import (
     DEFAULT_CONCENTRATION,
     DEFAULT_DISABLED_RATE,
@@ -22,8 +20,7 @@ from src.population.specification import (
     KeyRepositorySpecification,
 )
 from src.shared.layout import DEFAULT_ROOT, seed_directory
-from src.shared.rng import POPULATION, stream
-from src.shared.tables import shuffle_rows, write_csv
+from src.shared.tables import write_csv
 
 
 class Arguments(argparse.Namespace):
@@ -87,24 +84,13 @@ def main() -> None:
     args = parse_args()
     specification = key_repository_specification_from(args)
 
-    rng = stream(args.seed, POPULATION)
-    pool = scope_pool(specification.scope_count)
-
-    operators = build_operators_covering_pool(rng, pool)
-    scope_holders = holders_by_scope(operators)
-
-    scope_sizes = split_keys_by_scope(rng, pool, specification)
-    keys_in_scope_order = build_keys(rng, scope_sizes, scope_holders)
-    keys_with_status = disable_random_sample(
-        rng, keys_in_scope_order, specification.disabled_rate
-    )
-    keys = shuffle_rows(rng, keys_with_status)
+    population = build_population(args.seed, specification)
 
     destination = seed_directory(args.out, args.seed)
-    write_csv(operators, destination / "operators.csv")
-    write_csv(keys, destination / "keys.csv")
+    write_csv(population.operators, destination / "operators.csv")
+    write_csv(population.keys, destination / "keys.csv")
 
-    report(destination, operators, keys)
+    report(destination, population.operators, population.keys)
 
 
 if __name__ == "__main__":

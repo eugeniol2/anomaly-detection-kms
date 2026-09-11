@@ -100,6 +100,22 @@ explícito:
 python -m src.population --seed 42
 ```
 
+## Testes
+
+```
+python -m pytest
+```
+
+Cobrem determinismo e as invariantes de que os modulos seguintes dependem:
+toda chave tem proprietario que detem seu escopo, todo escopo tem detentor,
+identificadores de chave nunca sequenciais. As invariantes rodam nas 30
+sementes da grade, nao numa so.
+
+O `test_reference_output_has_not_changed` e detector de mudanca, nao teste de
+correcao: falha sempre que o gerador mudar, inclusive de proposito. Quando
+falhar, confirme se a mudanca era intencional, registre a decisao e atualize o
+valor de referencia.
+
 ## Reprodutibilidade
 
 Semente mais código determinam a saída inteira. É por isso que `data/` não é versionada:
